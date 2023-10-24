@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id   String @id
+  name String
+  unit Unit?
+}
+
+model Schedule {
+  id          String   @id
+  name        String   @unique(map: "Schedule_name_key")
+  description String
+  date        DateTime
+
+  units Unit[]
+}
+
+model Unit {
+  id     String  @id
+  name   String  @unique
+  lead   String
+  shifts Shift[]
+
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+
+  board   Board  @relation(fields: [boardId], references: [id])
+  boardId String @unique
+
+  @@index([scheduleId], map: "Unit_scheduleId_fkey")
+}
+
+model Shift {
+  id   String @id
+  name String
+  time String
+
+  unit   Unit?   @relation(fields: [unitId], references: [id])
+  unitId String?
+
+  employee Employee[]
+  User     User[]
+
+  @@index([unitId], map: "Shift_unitId_fkey")
+}
+
+model Employee {
+  id String @id
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  shift   Shift  @relation(fields: [shiftId], references: [id])
+  shiftId String
+}
+
+model User {
+  id       String    @id
+  name     String
+  email    String
+  role     user_role
+  position String
+
+  shiftId  String?
+  Shift    Shift?    @relation(fields: [shiftId], references: [id])
+  Employee Employee?
+
+  @@index([shiftId], map: "User_shiftId_fkey")
+}
+
+enum user_role {
+  ADMIN
+  CLIENT
+  USER
+}
