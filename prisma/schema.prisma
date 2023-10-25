@@ -9,13 +9,13 @@ datasource db {
 
 model Board {
   id   String @id
-  name String
-  unit Unit?
+  name String @unique
+  unit Unit[]
 }
 
 model Schedule {
   id          String   @id
-  name        String   @unique(map: "Schedule_name_key")
+  name        String  
   description String
   date        DateTime
 
@@ -24,15 +24,14 @@ model Schedule {
 
 model Unit {
   id     String  @id
-  name   String  @unique
   lead   String
   shifts Shift[]
 
-  scheduleId String
-  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  schedule   Schedule? @relation(fields: [scheduleId], references: [id])
+  scheduleId String?
 
-  board   Board  @relation(fields: [boardId], references: [id])
-  boardId String @unique
+  board   Board?  @relation(fields: [boardId], references: [id])
+  boardId String?
 
   @@index([scheduleId], map: "Unit_scheduleId_fkey")
 }

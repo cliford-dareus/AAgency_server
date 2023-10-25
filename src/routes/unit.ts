@@ -1,8 +1,8 @@
 import express from "express";
-import { createUnit, getUnit } from "../controllers/unit";
+import { createUnit, getUnits } from "../controllers/unit";
 
 const router = express.Router();
-router.route("/:unitname").get(getUnit);
-router.route("/").post(createUnit);
+// router.route("/").get(getUnit);
+router.route("/").post(createUnit).get(getUnits);
 
 export default router;

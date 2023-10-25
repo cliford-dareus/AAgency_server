@@ -7,7 +7,6 @@ const getAllSchedules = async (req: Request, res: Response) => {
       include: {
         units: {
           select: {
-            name: true,
             id: true,
           },
         },
