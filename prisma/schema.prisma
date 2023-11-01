@@ -15,7 +15,7 @@ model Board {
 
 model Schedule {
   id          String   @id
-  name        String  
+  name        String
   description String
   date        DateTime
 
@@ -61,9 +61,13 @@ model Employee {
 }
 
 model User {
-  id       String    @id
-  name     String
-  email    String
+  id           String  @id
+  name         String  @unique
+  email        String  @unique
+  hashPassword String
+  accessToken  String?
+  refreshToken String?
+
   role     user_role
   position String
 
@@ -75,7 +79,7 @@ model User {
 }
 
 enum user_role {
+  SUPER_ADMIN
   ADMIN
-  CLIENT
   USER
 }

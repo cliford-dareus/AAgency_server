@@ -3,11 +3,12 @@ import prisma from "../lib/prisma";
 import { randomUUID } from "crypto";
 
 export const createShift = async (req: Request, res: Response) => {
-  const { name, time, unitId, lead = "Bezos" } = req.body;
+  const { name, time, unitId, lead = "Unknown" } = req.body;
   const { sch, boa } = req.query;
   const description = "description";
 
   try {
+    // First check if the unit exists or not
     const unit = await prisma.unit.findFirst({
       where: {
         id: unitId,
@@ -50,7 +51,7 @@ export const createShift = async (req: Request, res: Response) => {
 
       console.log(unit);
 
-      // Create a new unit if unit exist
+      // Create a new shift when the new unit is  created
       const shift = await prisma.shift.create({
         data: {
           id: `shi_${randomUUID()}`,
@@ -90,3 +91,6 @@ export const getShifts = async (req: Request, res: Response) => {
   });
   res.status(200).json(shift);
 };
+
+
+export const updateShifts = async (req: Request, res: Response) => {};
