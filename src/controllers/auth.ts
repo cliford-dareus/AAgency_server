@@ -38,4 +38,8 @@ const loginUser = async (req: Request, res: Response) => {
   res.status(200).json(user);
 };
 
-export { registerUser, loginUser };
+const logoutUser = async (req: Request, res: Response) => {
+
+};
+
+export { registerUser, loginUser, logoutUser };

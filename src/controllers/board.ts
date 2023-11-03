@@ -1,16 +1,27 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
+import { randomUUID } from "crypto";
 
 const createBoard = async (req: Request, res: Response) => {
-  const { id, name } = req.body;
+  const { name } = req.body;
 
-  const schedule = await prisma.board.create({
-    data: {
-      id,
+  const board = await prisma.board.findUnique({
+    where: {
       name,
     },
   });
-  res.status(200).json(schedule);
+
+  if (board) {
+    throw new Error(`Board ${board.name} already exists`);
+  }
+
+  const newBoard = await prisma.board.create({
+    data: {
+      id: `boa_${randomUUID()}`,
+      name,
+    },
+  });
+  res.status(200).json(newBoard);
 };
 
 const getBoard = async (req: Request, res: Response) => {
@@ -36,6 +47,7 @@ const updateBoard = async (req: Request, res: Response) => {
 
 const deleteBoard = async (req: Request, res: Response) => {
   const { id } = req.params;
+
   try {
     const board = await prisma.board.delete({
       where: {
@@ -43,7 +55,9 @@ const deleteBoard = async (req: Request, res: Response) => {
       },
     });
     res.status(200).json(board);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 export { createBoard, getBoard, updateBoard, deleteBoard };

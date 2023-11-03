@@ -30,7 +30,7 @@ model Unit {
   schedule   Schedule? @relation(fields: [scheduleId], references: [id])
   scheduleId String?
 
-  board   Board?  @relation(fields: [boardId], references: [id])
+  board   Board?  @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId String?
 
   @@index([scheduleId], map: "Unit_scheduleId_fkey")
@@ -41,7 +41,7 @@ model Shift {
   name String
   time String
 
-  unit   Unit?   @relation(fields: [unitId], references: [id])
+  unit   Unit?   @relation(fields: [unitId], references: [id], onDelete: Cascade)
   unitId String?
 
   employee Employee[]
@@ -54,7 +54,7 @@ model Employee {
   id String @id
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  userId String
 
   shift   Shift  @relation(fields: [shiftId], references: [id])
   shiftId String
@@ -72,8 +72,8 @@ model User {
   position String
 
   shiftId  String?
-  Shift    Shift?    @relation(fields: [shiftId], references: [id])
-  Employee Employee?
+  Shift    Shift?     @relation(fields: [shiftId], references: [id])
+  Employee Employee[]
 
   @@index([shiftId], map: "User_shiftId_fkey")
 }

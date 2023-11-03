@@ -86,11 +86,14 @@ export const getShifts = async (req: Request, res: Response) => {
       unitId,
     },
     include: {
-      employee: true,
+      employee: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
   res.status(200).json(shift);
 };
-
 
 export const updateShifts = async (req: Request, res: Response) => {};

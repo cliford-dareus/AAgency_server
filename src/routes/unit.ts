@@ -4,5 +4,5 @@ import { isAuthorized } from "../guards/isAuthorized";
 
 const router = express.Router();
 // router.route("/").get(getUnit);
-router.route("/").post(createUnit).get(isAuthorized(), getUnits).put(updateUnit);
+router.route("/").post(createUnit).get( getUnits).put(updateUnit);
 export default router;
